@@ -6,7 +6,7 @@
 #include "EL.h"
 
 // オブジェクトを一つだけサポートする。
-EL::EL(WiFiUDP& udp, byte eoj0, byte eoj1, byte eoj2)
+EL::EL(UDP& udp, byte eoj0, byte eoj1, byte eoj2)
 {
 	_udp = &udp;
     _eoj[0] = eoj0;
@@ -33,7 +33,7 @@ EL::EL(WiFiUDP& udp, byte eoj0, byte eoj1, byte eoj2)
 }
 
 // 複数のオブジェクトをサポートする。
-EL::EL(WiFiUDP &udp, byte eoj[][3], int count)
+EL::EL(UDP &udp, byte eoj[][3], int count)
 {
     _udp = &udp;
 
@@ -177,7 +177,7 @@ void EL::sendMulti(byte sBuffer[], int size)
 {
 	// sendBroad(sBuffer, size);
 
-	if (_udp->beginMulticastPacket())
+	if (_udp->beginPacket(_multi, EL_PORT))
 	{
 		// Serial.println("UDP beginPacket(B) Successful.");
 		_udp->write(sBuffer, size);

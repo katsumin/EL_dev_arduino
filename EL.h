@@ -9,8 +9,7 @@
 // #define EL_DEBUG
 
 #include <Arduino.h>
-#include <WiFi.h>
-#include <WiFiUDP.h>
+#include <Udp.h>
 #include "ELOBJ.h"
 
 // defined
@@ -148,18 +147,18 @@ class EL
 {
 private:
 	IPAddress ip;
-	IPAddress _multi;
 	byte _broad[4];
 	byte _eoj[3];
-    byte* _eojs;
     int _sendPacketSize = 0;
     int _readPacketSize = 0;
 	byte _sBuffer[EL_BUFFER_SIZE]; // send buffer
-	WiFiUDP* _udp;
-    int deviceCount;
 
 protected:
-	int parsePacket(void);
+    IPAddress _multi;
+    byte *_eojs;
+    UDP *_udp;
+    int deviceCount;
+    int parsePacket(void);
 
 public:
 	ELOBJ profile; // profile object (for specialist)
@@ -167,9 +166,9 @@ public:
     ELOBJ *devices;
 	byte _rBuffer[EL_BUFFER_SIZE]; // receive buffer
 
-    EL(WiFiUDP &udp, byte eoj0, byte eoj1, byte eoj2);
-    EL(WiFiUDP &udp, byte [][3], int count);
-    void begin(void);
+    EL(UDP &udp, byte eoj0, byte eoj1, byte eoj2);
+    EL(UDP &udp, byte [][3], int count);
+    virtual void begin(void);
 
     // details change
 	void update(const byte epc, byte pdcedt[]);
@@ -178,7 +177,7 @@ public:
 	byte *at(const int devId, const byte epc);
 
 	// sender
-	void send(IPAddress toip, byte sBuffer[], int size);
+	virtual void send(IPAddress toip, byte sBuffer[], int size);
 	void sendOPC1(const IPAddress toip, const byte *tid, const byte *seoj, const byte *deoj, const byte esv, const byte epc, const byte *edt);
 	void sendOPC1(const IPAddress toip, const byte *seoj, const byte *deoj, const byte esv, const byte epc, const byte *edt);
 	void sendOPC1(const IPAddress toip, const byte *deoj, const byte esv, const byte epc, const byte *edt);
