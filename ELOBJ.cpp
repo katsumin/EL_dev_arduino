@@ -15,14 +15,14 @@ PDCEDT::PDCEDT()
 }
 PDCEDT::PDCEDT(const PDCEDT& val) // copy constractor
 {
-    length = val[0] + 1;
+    length = val[1] + 2;
     m_pdcedt = new byte[length];
     memcpy(m_pdcedt, val, length);
 }
 
 PDCEDT::PDCEDT(const byte* val)
 {
-    length = val[0] + 1;
+    length = val[1] + 2;
     m_pdcedt = new byte[length];
     memcpy(m_pdcedt, val, length);
 }
@@ -48,7 +48,7 @@ const PDCEDT PDCEDT::operator=(const PDCEDT val)
     }
     // cout << "new" << endl;
 
-    length = val[0] + 1;
+    length = val[1] + 2;
     // cout << size << endl;
     m_pdcedt = new byte[length];
     memcpy(m_pdcedt, val, length);
@@ -66,7 +66,7 @@ const byte* PDCEDT::operator=(const byte* val)
     }
     // cout << "new" << endl;
 
-    length = val[0] + 1;
+    length = val[1] + 2;
     // cout << size << endl;
     m_pdcedt = new byte[length];
     memcpy(m_pdcedt, val, length);
@@ -90,11 +90,10 @@ void PDCEDT::print(void) const
     Serial.print("[");
     Serial.print(length);
     Serial.print("]: ");
-    Serial.print((int)m_pdcedt[0]);
-    for (byte i = 1; i < length; i += 1)
+    for (byte i = 0; i < length; i += 1)
     {
         Serial.print(", ");
-        Serial.print((int)m_pdcedt[i]);
+        Serial.print((int)m_pdcedt[i], HEX);
     }
     Serial.print("\n");
 #else
@@ -170,7 +169,7 @@ void ELOBJ::printAll() const
         if (nullptr != m_pdcedt[i])
         {
 #ifdef Arduino_h
-            Serial.print( (int)(i + 0x80) );
+            Serial.print( (int)(i + 0x80), HEX );
             Serial.print(": ");
 #else
             cout << hex << i + 0x80 << ": ";
